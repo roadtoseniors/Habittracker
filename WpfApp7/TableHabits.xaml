@@ -1,0 +1,37 @@
+﻿<Window x:Class="WpfApp7.TableHabits"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Habit Tracker" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Панель для добавления новой привычки -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="10">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBox x:Name="txtNewHabit" Width="200" Margin="5"/>
+                <TextBox x:Name="txtHabitDescription" Width="300" Margin="5"/>
+                <Button x:Name="btnAddHabit" Content="Добавить привычку" Margin="5" Click="btnAddHabit_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Список привычек -->
+        <ListView x:Name="lstHabits" Grid.Row="1" Margin="10" Width="700">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Привычка" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                    <GridViewColumn Header="Описание" DisplayMemberBinding="{Binding Description}" Width="300"/>
+                    <GridViewColumn Header="Выполнено" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding CompletionDate}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
