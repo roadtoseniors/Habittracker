@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Login/Registration" Height="350" Width="400">
     <Grid>
-        <!-- TabControl для переключения между входом и регистрацией -->
         <TabControl>
             <!-- Вкладка "Вход" -->
             <TabItem Header="Login">
