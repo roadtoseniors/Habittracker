@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Windows;
 
 namespace WpfApp7
 {
     public partial class MainWindow : Window
     {
-        // Словарь для хранения пользователей (в реальном приложении используйте базу данных)
-        private Dictionary<string, string> users = new Dictionary<string, string>();
-
         public MainWindow()
         {
             InitializeComponent();
+            _reposUsers = new userRepository()
         }
 
-        // Обработчик кнопки "Login"
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string username = LoginUsername.Text;
@@ -34,7 +32,6 @@ namespace WpfApp7
             }
         }
 
-        // Обработчик кнопки "Register"
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             string username = RegisterUsername.Text;
@@ -52,15 +49,18 @@ namespace WpfApp7
                 RegisterMessage.Text = "Passwords do not match.";
                 return;
             }
+            Random random = new Random();
 
-            if (users.ContainsKey(username))
+            users user = new users
             {
-                RegisterMessage.Text = "Username already exists.";
-                return;
+                id = random.Next(1, 52),
+                name = username,
+                password = password,
             }
 
-            // Добавление нового пользователя
-            users[username] = password;
+            userRepository userRepo = new userRepository();
+            users.addUser(user);
+
             RegisterMessage.Text = "Успешная регистрация. Перейдите на вкладку входа";
         }
     }
