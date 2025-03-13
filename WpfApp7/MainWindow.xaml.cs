@@ -6,12 +6,15 @@ namespace WpfApp7
 {
     public partial class MainWindow : Window
     {
-        // Словарь для хранения пользователей (в реальном приложении используйте базу данных)
-        private Dictionary<string, string> users = new Dictionary<string, string>();
+        private readonly DatabaseService _dbService;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            // Укажите строку подключения к вашей базе данных PostgreSQL
+            string connectionString = "Host=localhost;Username=postgres;Password=postgres;Database=HabitTracker";
+            _dbService = new DatabaseService(connectionString);
         }
 
         // Обработчик кнопки "Login"
@@ -20,11 +23,10 @@ namespace WpfApp7
             string username = LoginUsername.Text;
             string password = LoginPassword.Password;
 
-            if (users.ContainsKey(username) && users[username] == password)
+            if (_dbService.LoginUser(username, password))
             {
                 LoginMessage.Text = "Login successful!";
-                // Здесь можно открыть новое окно или выполнить другие действия
-                TableHabits tableHabits = new TableHabits();
+                TableHabits tableHabits = new TableHabits(username);
                 tableHabits.Show();
                 this.Close();
             }
@@ -53,15 +55,15 @@ namespace WpfApp7
                 return;
             }
 
-            if (users.ContainsKey(username))
+            try
             {
-                RegisterMessage.Text = "Username already exists.";
-                return;
+                _dbService.RegisterUser(username, password);
+                RegisterMessage.Text = "Успешная регистрация. Перейдите на вкладку входа";
             }
-
-            // Добавление нового пользователя
-            users[username] = password;
-            RegisterMessage.Text = "Успешная регистрация. Перейдите на вкладку входа";
+            catch (Exception ex)
+            {
+                RegisterMessage.Text = "Ошибка регистрации: " + ex.Message;
+            }
         }
     }
 }
